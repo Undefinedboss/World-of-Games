@@ -10,29 +10,26 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'build.bat'
+                sh './build.sh'
             }
         }
 
         stage('Run') {
             steps {
-                bat 'docker-compose up -d'
-                sleep(time: 10, unit: "SECONDS") // Wait for the app to start
+                sh 'docker-compose up -d'
+                sleep(time: 10, unit: "SECONDS")
             }
         }
 
         stage('Test') {
             steps {
-                bat 'python e2e.py'
+                sh 'python3 e2e.py'
             }
         }
 
         stage('Finalize') {
             steps {
-                bat 'docker-compose down'
-                // Optional: docker push command if DockerHub credentials are configured
-                // bat 'docker tag world-of-games yourdockerhubusername/world-of-games:latest'
-                // bat 'docker push yourdockerhubusername/world-of-games:latest'
+                sh 'docker-compose down'
             }
         }
     }
